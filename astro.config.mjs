@@ -6,13 +6,11 @@ import icon from 'astro-icon';
 
 // GitHub Pages project site: https://josepkfr.github.io/Portfolio/
 // With a custom domain (or Vercel/Netlify), set `site` to it and remove `base`.
-const site = 'https://josepkfr.github.io';
-const base = '/Portfolio';
+const site = 'https://alpalajose.me';
 
 // https://astro.build/config
 export default defineConfig({
   site,
-  base,
   trailingSlash: 'always',
   i18n: {
     locales: ['es', 'en'],
@@ -48,7 +46,7 @@ export default defineConfig({
     sitemap({
       i18n: { defaultLocale: 'es', locales: { es: 'es', en: 'en' } },
       // The root page only redirects to a language.
-      filter: (page) => new URL(page).pathname !== `${base}/`,
+      filter: (page) => new URL(page).pathname !== `/`,
     }),
   ],
   vite: {
