@@ -1,0 +1,152 @@
+---
+import { Icon } from 'astro-icon/components';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import ProjectCover from './ProjectCover.astro';
+import type { Project } from '../lib/projects';
+import { useTranslations, type Locale, type UIKey } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  project: Project;
+  index: number;
+}
+
+const { lang, project, index } = Astro.props;
+const { slug, entry } = project;
+const t = useTranslations(lang);
+const showDraft = import.meta.env.DEV && entry.data.draft;
+// A generated cover already shows the title, so the hover panel would repeat it.
+const generated = !entry.data.cover;
+---
+
+<li
+  class="card"
+  data-project
+  data-category={entry.data.category}
+  data-reveal
+  style={`--i: ${index % 3}`}
+  transition:name={`project-${slug}`}
+>
+  <a href={getRelativeLocaleUrl(lang, `projects/${slug}/`)}>
+    <div class="media">
+      <ProjectCover lang={lang} project={entry.data} sizes="(min-width: 1024px) 410px, (min-width: 640px) 45vw, 92vw" />
+    </div>
+    {showDraft && <span class="draft">{t('projects.draft')}</span>}
+    <div class:list={[generated ? 'sr-only' : 'info']}>
+      <div>
+        <h3>{entry.data.title}</h3>
+        <p>{t(`category.${entry.data.category}` as UIKey)}</p>
+      </div>
+      <Icon name="bi:arrow-up-right" class="arrow" />
+    </div>
+    {generated && <Icon name="bi:arrow-up-right" class="corner" />}
+  </a>
+</li>
+
+<style>
+  a {
+    position: relative;
+    display: block;
+    overflow: hidden;
+  }
+
+  .media {
+    aspect-ratio: 4 / 3;
+    transition: scale 0.6s var(--ease-out-soft);
+  }
+
+  a:hover .media,
+  a:focus-visible .media {
+    scale: 1.05;
+  }
+
+  /* Info panel that slides up over the cover, as in the original design. */
+  .info {
+    position: absolute;
+    inset: auto 1rem 1rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem 1rem;
+    background: rgb(242 242 242 / 0.94);
+    color: #5a686b;
+  }
+
+  h3 {
+    color: #455052;
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+
+  p {
+    margin-top: 0.15rem;
+    font-size: 0.8125rem;
+    color: #5a686b;
+  }
+
+  .arrow {
+    flex: none;
+    font-size: 1.25rem;
+    color: #17795a;
+    transition: translate 0.3s var(--ease-out-soft);
+  }
+
+  a:hover .arrow {
+    translate: 3px -3px;
+  }
+
+  /* Arrow tile for generated covers; it grows out of the mint bar. */
+  .corner {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    box-sizing: content-box;
+    padding: 0.7rem;
+    background: #91e0c4;
+    color: #303839;
+    font-size: 1.1rem;
+    display: none;
+  }
+
+  .draft {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.1rem 0.5rem;
+    background: #91e0c4;
+    color: #303839;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* With a mouse the panel appears on hover; on touch screens it stays visible. */
+  @media (hover: hover) {
+    .info {
+      opacity: 0;
+      translate: 0 1rem;
+      transition:
+        opacity 0.3s ease,
+        translate 0.4s var(--ease-out-soft);
+    }
+
+    .corner {
+      display: block;
+      opacity: 0;
+      translate: 0.5rem 0.5rem;
+      transition:
+        opacity 0.3s ease,
+        translate 0.4s var(--ease-out-soft);
+    }
+
+    a:hover .info,
+    a:focus-visible .info,
+    a:hover .corner,
+    a:focus-visible .corner {
+      opacity: 1;
+      translate: none;
+    }
+  }
+</style>

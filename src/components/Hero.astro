@@ -1,0 +1,197 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import background from '../assets/home-bg.jpg';
+import { SITE } from '../consts';
+import { heroWords, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const words = heroWords[lang];
+
+const socials = [
+  { href: SITE.linkedin, icon: 'bi:linkedin', label: 'LinkedIn' },
+  { href: SITE.github, icon: 'bi:github', label: 'GitHub' },
+  { href: `mailto:${SITE.email}`, icon: 'bi:envelope', label: 'Email' },
+];
+---
+
+<section id="hero" class="hero">
+  <Image
+    src={background}
+    alt=""
+    class="hero-bg"
+    width={1600}
+    widths={[640, 1024, 1600, 2400]}
+    sizes="100vw"
+    quality={60}
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="shade"></div>
+
+  <div class="wrap content">
+    <h1 class="animate-in" style="--i: 0">
+      {t('hero.greeting')}{' '}
+      <span class="sr-only">{words[0]}</span>
+      <span class="typed" aria-hidden="true" data-typed={JSON.stringify(words)}>{words[0]}</span>
+    </h1>
+    <p class="tagline animate-in" style="--i: 1">{t('hero.tagline')}</p>
+    <ul class="socials animate-in" style="--i: 2">
+      {
+        socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              aria-label={social.label}
+              {...social.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+            >
+              <Icon name={social.icon} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <a href="#about" class="scroll animate-in" style="--i: 4" aria-label={t('hero.scroll')}>
+    <Icon name="bi:chevron-down" />
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    overflow: hidden;
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Darkens the photo towards the text side so the heading stays readable. */
+  .shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(31 37 38 / 0.82), rgb(31 37 38 / 0.35) 70%),
+      linear-gradient(0deg, rgb(31 37 38 / 0.55), transparent 40%);
+  }
+
+  .content {
+    position: relative;
+    padding-block: 7rem;
+  }
+
+  h1 {
+    color: var(--color-paper);
+    font-size: clamp(1.75rem, 0.6rem + 6vw, 4.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    /* Reserves the line so the layout does not jump while the word is empty. */
+    min-height: 1.1em;
+  }
+
+  /* On narrow screens the typed word gets its own line, so words of different
+     length never change the number of lines. */
+  @media (max-width: 639px) {
+    .typed {
+      display: block;
+      min-height: 1.1em;
+    }
+  }
+
+  .typed::after {
+    content: '';
+    display: inline-block;
+    width: 0.06em;
+    height: 0.85em;
+    margin-left: 0.08em;
+    background: var(--color-mint);
+    vertical-align: baseline;
+    animation: blink 1s steps(1) infinite;
+  }
+
+  .tagline {
+    margin-top: 1rem;
+    font-size: clamp(0.8125rem, 0.75rem + 0.3vw, 0.9375rem);
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .socials {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.75rem;
+    margin-left: -0.6rem;
+  }
+
+  .socials a {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.5rem;
+    transition:
+      color 0.3s ease,
+      translate 0.3s var(--ease-out-soft);
+  }
+
+  .socials a:hover {
+    color: var(--color-mint);
+    translate: 0 -3px;
+  }
+
+  .scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 1.5rem;
+    margin-left: -1.375rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.5rem;
+    color: rgb(242 242 242 / 0.8);
+  }
+
+  .scroll:hover {
+    color: var(--color-mint);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll :global(svg) {
+      animation: nudge 1.8s ease-in-out infinite;
+    }
+
+    /* Parallax: the photo drifts and zooms slightly while the hero scrolls away. */
+    @supports (animation-timeline: scroll()) {
+      .hero-bg {
+        animation: drift linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+
+      @keyframes drift {
+        to {
+          transform: translateY(14%) scale(1.08);
+        }
+      }
+    }
+  }
+</style>

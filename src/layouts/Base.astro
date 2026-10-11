@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import { ClientRouter } from 'astro:transitions';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BackToTop from '../components/BackToTop.astro';
+import { SITE, asset } from '../consts';
+import { locales, defaultLocale, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  /** Path of this page inside its locale, e.g. "projects/gapsi/". */
+  path?: string;
+  /** The header starts transparent on top of a full-height hero. */
+  overlayHeader?: boolean;
+  /** Extra structured data for the page. */
+  jsonLd?: Record<string, unknown>;
+}
+
+const { lang, title, description, path = '', overlayHeader = false, jsonLd } = Astro.props;
+const t = useTranslations(lang);
+const canonical = getAbsoluteLocaleUrl(lang, path);
+const ogImage = new URL(asset('og.jpg'), Astro.site);
+---
+
+<!doctype html>
+<html lang={lang} data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.name} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="canonical" href={canonical} />
+    {locales.map((code) => <link rel="alternate" hreflang={code} href={getAbsoluteLocaleUrl(code, path)} />)}
+    <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl(defaultLocale, path)} />
+
+    <link rel="icon" type="image/png" href={asset('favicon.png')} />
+    <link rel="apple-touch-icon" href={asset('apple-touch-icon.png')} />
+    <meta name="theme-color" content="#f2f2f2" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang === 'es' ? 'es_LA' : 'en_US'} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <Font cssVariable="--font-poppins" preload />
+    <Font cssVariable="--font-playfair" />
+
+    {/* Applies the saved theme before the first paint and after each page swap. */}
+    <script is:inline>
+      (() => {
+        const apply = () => {
+          let theme = 'light';
+          try {
+            if (localStorage.getItem('theme') === 'dark') theme = 'dark';
+          } catch {}
+          document.documentElement.dataset.theme = theme;
+        };
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+      })();
+    </script>
+
+    {jsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+
+    <ClientRouter />
+  </head>
+  <body id="top">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+    >
+      {t('nav.skip')}
+    </a>
+    <Header lang={lang} path={path} overlay={overlayHeader} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <BackToTop lang={lang} />
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>
