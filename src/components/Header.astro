@@ -1,0 +1,295 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import logo from '../assets/logo.png';
+import { SITE } from '../consts';
+import { locales, useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+  path: string;
+  overlay: boolean;
+}
+
+const { lang, path, overlay } = Astro.props;
+const t = useTranslations(lang);
+const home = getRelativeLocaleUrl(lang);
+
+const links = [
+  { id: 'hero', label: t('nav.home') },
+  { id: 'about', label: t('nav.about') },
+  { id: 'skills', label: t('nav.skills') },
+  { id: 'projects', label: t('nav.projects') },
+  { id: 'contact', label: t('nav.contact') },
+];
+---
+
+<header id="site-header" data-overlay={overlay ? '' : undefined}>
+  <div class="wrap bar">
+    <a href={home} class="logo" aria-label={SITE.name}>
+      <Image src={logo} alt="" height={80} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav id="site-nav" aria-label={t('nav.label')}>
+      <ul>
+        {
+          links.map((link) => (
+            <li>
+              <a href={`${home}#${link.id}`} data-nav-link>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="tools">
+      <ul class="langs" aria-label={t('nav.language')}>
+        {
+          locales.map((code) => (
+            <li>
+              <a
+                href={getRelativeLocaleUrl(code, path)}
+                hreflang={code}
+                lang={code}
+                data-lang-link
+                aria-current={code === lang ? 'true' : undefined}
+              >
+                {code.toUpperCase()}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <button type="button" class="icon-btn" data-theme-toggle aria-pressed="false" aria-label={t('nav.theme')}>
+        <Icon name="bi:moon-stars" class="moon" />
+        <Icon name="bi:sun" class="sun" />
+      </button>
+
+      <button
+        type="button"
+        class="icon-btn menu-btn"
+        data-menu-toggle
+        aria-expanded="false"
+        aria-controls="site-nav"
+        aria-label={t('nav.menu')}
+      >
+        <Icon name="bi:list" class="open" />
+        <Icon name="bi:x-lg" class="close" />
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    --fg: var(--muted);
+    --fg-strong: var(--heading);
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 25px rgb(var(--shadow) / 0.1);
+    transition:
+      background-color 0.4s ease,
+      box-shadow 0.4s ease;
+  }
+
+  /* On top of the hero the bar is transparent until the page scrolls. */
+  header[data-overlay]:not([data-scrolled], [data-open]) {
+    --fg: rgb(242 242 242 / 0.85);
+    --fg-strong: #fff;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    height: 4.375rem;
+  }
+
+  .logo {
+    display: block;
+    flex: none;
+  }
+
+  /* The logo is black on transparent; invert it wherever the bar is dark. */
+  .logo img {
+    height: 2.5rem;
+    width: auto;
+    transition: filter 0.4s ease;
+  }
+
+  header[data-overlay]:not([data-scrolled], [data-open]) .logo img,
+  :global([data-theme='dark']) .logo img {
+    filter: invert(1);
+  }
+
+  nav ul {
+    display: flex;
+    gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  nav a {
+    position: relative;
+    display: block;
+    padding-block: 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--fg);
+    transition: color 0.3s ease;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0.3rem 0;
+    height: 2px;
+    background: var(--color-mint);
+    scale: 0 1;
+    transform-origin: left;
+    transition: scale 0.35s var(--ease-out-soft);
+  }
+
+  nav a:hover,
+  nav a:global(.is-active) {
+    color: var(--fg-strong);
+  }
+
+  nav a:hover::after,
+  nav a:global(.is-active)::after {
+    scale: 1 1;
+  }
+
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .langs {
+    display: flex;
+    align-items: center;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+  }
+
+  .langs li + li::before {
+    content: '/';
+    color: var(--fg);
+    opacity: 0.5;
+  }
+
+  .langs a {
+    display: inline-block;
+    padding: 0.5rem 0.4rem;
+    color: var(--fg);
+    transition: color 0.3s ease;
+  }
+
+  .langs a:hover,
+  .langs a[aria-current] {
+    color: var(--fg-strong);
+  }
+
+  .langs a[aria-current] {
+    font-weight: 700;
+  }
+
+  .icon-btn {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--fg);
+    font-size: 1.15rem;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  .icon-btn:hover {
+    color: var(--fg-strong);
+  }
+
+  .sun,
+  .icon-btn[aria-pressed='true'] .moon,
+  .close,
+  .menu-btn[aria-expanded='true'] .open {
+    display: none;
+  }
+
+  .icon-btn[aria-pressed='true'] .sun,
+  .menu-btn[aria-expanded='true'] .close {
+    display: block;
+  }
+
+  .menu-btn {
+    display: none;
+    font-size: 1.6rem;
+  }
+
+  @media (max-width: 899px) {
+    .menu-btn {
+      display: grid;
+    }
+
+    nav {
+      position: fixed;
+      inset: 4.375rem 0 0 0;
+      height: calc(100dvh - 4.375rem);
+      background: var(--bg);
+      padding: 1.5rem clamp(1.25rem, 4vw, 2rem);
+      overflow-y: auto;
+      visibility: hidden;
+      opacity: 0;
+      translate: 0 -0.75rem;
+      transition:
+        opacity 0.3s ease,
+        translate 0.3s var(--ease-out-soft),
+        visibility 0s 0.3s;
+    }
+
+    header[data-open] nav {
+      visibility: visible;
+      opacity: 1;
+      translate: none;
+      transition-delay: 0s;
+    }
+
+    nav ul {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    nav li + li {
+      border-top: 1px solid var(--line);
+    }
+
+    nav a {
+      padding-block: 1.1rem;
+      font-size: 1.125rem;
+      color: var(--heading);
+    }
+
+    nav a::after {
+      display: none;
+    }
+
+    nav a:global(.is-active) {
+      color: var(--accent-text);
+    }
+  }
+
+  :global(html[data-menu-open]) {
+    overflow: hidden;
+  }
+</style>

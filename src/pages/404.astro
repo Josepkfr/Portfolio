@@ -1,0 +1,22 @@
+---
+// GitHub Pages serves this single file for every unknown URL, in any
+// language, so it shows both.
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import Base from '../layouts/Base.astro';
+import { ui } from '../i18n/ui';
+---
+
+<Base lang="es" title={`404 — ${ui.es['404.title']}`} description={ui.es['404.text']}>
+  <section class="wrap grid min-h-[80svh] place-items-center pb-16 pt-32 text-center">
+    <div>
+      <p class="animate-in font-serif text-[clamp(4rem,14vw,8rem)] leading-none italic text-mint-strong" style="--i: 0">404</p>
+      <h1 class="animate-in mt-4 text-xl uppercase tracking-[0.14em]" style="--i: 1">{ui.es['404.title']}</h1>
+      <p class="animate-in mt-3" style="--i: 2">{ui.es['404.text']}</p>
+      <p class="animate-in" lang="en" style="--i: 2">{ui.en['404.text']}</p>
+      <div class="animate-in mt-8 flex flex-wrap justify-center gap-3" style="--i: 3">
+        <a href={getRelativeLocaleUrl('es')} class="btn">{ui.es['404.home']}</a>
+        <a href={getRelativeLocaleUrl('en')} class="btn btn-outline" lang="en">{ui.en['404.home']}</a>
+      </div>
+    </div>
+  </section>
+</Base>

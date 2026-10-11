@@ -1,0 +1,321 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Design tokens. Palette and type come from the original Folio look:
+   light greys, dark slate text and a single mint accent. */
+:root {
+  --bg: #f2f2f2;
+  --surface: #f8f8f8;
+  --card: #ffffff;
+  --text: #5a686b;
+  --muted: #607073;
+  --heading: #455052;
+  --line: #dde2e2;
+  /* Mint as text needs a darker shade on light backgrounds to stay readable. */
+  --accent-text: #17795a;
+  --shadow: 90 104 107;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #1f2526;
+  --surface: #262d2e;
+  --card: #2c3435;
+  --text: #b6c1c3;
+  --muted: #9aa8aa;
+  --heading: #eef1f1;
+  --line: #3a4546;
+  --accent-text: #91e0c4;
+  --shadow: 0 0 0;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-heading: var(--heading);
+  --color-line: var(--line);
+  --color-accent: var(--accent-text);
+  --color-ink: #303839;
+  --color-mint: #91e0c4;
+  --color-mint-strong: #4acc9d;
+  --color-mint-soft: #b5ead7;
+  --color-paper: #f2f2f2;
+
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@layer base {
+  html {
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.75;
+    letter-spacing: 0.02em;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--heading);
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  ::selection {
+    background: #6dd6b0;
+    color: #1f2526;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-text);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 82.5rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 4vw, 2rem);
+  }
+
+  .section {
+    padding-block: clamp(4rem, 9vw, 6.5rem);
+  }
+
+  /* Uppercase, widely tracked section heading with a mint rule under it. */
+  .section-title {
+    font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: clamp(2.5rem, 6vw, 4.25rem);
+  }
+
+  .section-title::after {
+    content: "";
+    display: block;
+    width: 3rem;
+    height: 4px;
+    margin: 1rem auto 0;
+    background: var(--color-mint);
+    transform-origin: center;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 3.125rem;
+    padding-inline: 1.875rem;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .btn:hover {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+
+  [data-theme="dark"] .btn {
+    background: var(--color-mint);
+    color: var(--color-ink);
+  }
+
+  [data-theme="dark"] .btn:hover {
+    background: var(--color-paper);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--heading);
+    box-shadow: inset 0 0 0 1px var(--muted);
+  }
+
+  [data-theme="dark"] .btn-outline {
+    background: transparent;
+    color: var(--heading);
+  }
+
+  .btn-outline:hover,
+  [data-theme="dark"] .btn-outline:hover {
+    background: var(--color-mint);
+    color: var(--color-ink);
+    box-shadow: none;
+  }
+
+  /* Small uppercase label used for tags and metadata. */
+  .chip {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border: 1px solid var(--line);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* Link with a mint underline that grows from the left on hover. */
+  .link-underline {
+    background: linear-gradient(var(--color-mint), var(--color-mint)) no-repeat 0 100% / 0 2px;
+    transition: background-size 0.35s var(--ease-out-soft);
+    padding-bottom: 2px;
+  }
+
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 2px;
+  }
+
+  /* Rendered Markdown of a project. */
+  .prose > * + * {
+    margin-top: 1.1rem;
+  }
+
+  .prose h2 {
+    margin-top: 2.25rem;
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .prose ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .prose li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .prose li + li {
+    margin-top: 0.4rem;
+  }
+
+  .prose li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.75em;
+    width: 0.6rem;
+    height: 2px;
+    background: var(--color-mint-strong);
+  }
+
+  .prose a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .prose code {
+    padding: 0.1em 0.35em;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    font-size: 0.9em;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion. Everything below is switched off for visitors who ask for reduced
+   motion, and content is fully visible without JavaScript.
+--------------------------------------------------------------------------- */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    translate: 0 1.5rem;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes nudge {
+  50% {
+    translate: 0 0.4rem;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Entrance on page load, staggered with --i. */
+  .animate-in {
+    animation: fade-up 0.8s var(--ease-out-soft) both;
+    animation-delay: calc(var(--i, 0) * 120ms + 100ms);
+  }
+
+  /* Entrance on scroll. The `js` class is added by src/scripts/site.ts right
+     before it starts observing, so nothing stays hidden if the script fails. */
+  .js [data-reveal] {
+    opacity: 0;
+    translate: 0 1.75rem;
+    transition:
+      opacity 0.7s ease,
+      translate 0.8s var(--ease-out-soft);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+
+  /* A group only triggers the animations of its children. */
+  .js [data-reveal="group"] {
+    opacity: 1;
+    translate: none;
+  }
+
+  .js [data-reveal].is-visible {
+    opacity: 1;
+    translate: none;
+  }
+
+  .js .section-title[data-reveal]::after {
+    scale: 0 1;
+    transition: scale 0.7s var(--ease-out-soft) 0.25s;
+  }
+
+  .js .section-title[data-reveal].is-visible::after {
+    scale: 1 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

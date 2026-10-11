@@ -1,0 +1,132 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SITE } from '../consts';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const channels = [
+  { label: t('contact.email'), value: SITE.email, href: `mailto:${SITE.email}`, icon: 'bi:envelope' },
+  { label: t('contact.linkedin'), value: 'José Alpala', href: SITE.linkedin, icon: 'bi:linkedin' },
+  { label: t('contact.github'), value: '@Josepkfr', href: SITE.github, icon: 'bi:github' },
+];
+---
+
+<section id="contact" class="section bg-surface" aria-labelledby="contact-title">
+  <div class="wrap grid gap-10 lg:grid-cols-2 lg:gap-16">
+    <div>
+      <h2 id="contact-title" class="text-[clamp(1.35rem,1.1rem+1vw,1.75rem)] uppercase tracking-[0.14em]" data-reveal>
+        {t('contact.title')}
+      </h2>
+      <p class="mt-5 max-w-[36ch] font-serif text-[clamp(1.2rem,1rem+0.9vw,1.6rem)] leading-snug italic text-heading" data-reveal style="--i: 1">
+        {t('contact.lead')}
+      </p>
+    </div>
+
+    <ul>
+      {
+        channels.map((channel, index) => (
+          <li data-reveal style={`--i: ${index}`}>
+            <a
+              href={channel.href}
+              {...channel.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+            >
+              <Icon name={channel.icon} class="icon" />
+              <span class="text">
+                <span class="label">{channel.label}</span>
+                <span class="value">{channel.value}</span>
+              </span>
+              <Icon name="bi:arrow-up-right" class="arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  li:first-child {
+    border-top: 1px solid var(--line);
+  }
+
+  a {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.15rem 0.25rem;
+    transition: padding 0.4s var(--ease-out-soft);
+  }
+
+  /* Mint bar that grows from the left edge on hover. */
+  a::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--color-mint);
+    scale: 1 0;
+    transition: scale 0.35s var(--ease-out-soft);
+  }
+
+  a:hover,
+  a:focus-visible {
+    padding-left: 1.25rem;
+  }
+
+  a:hover::before,
+  a:focus-visible::before {
+    scale: 1 1;
+  }
+
+  .icon {
+    flex: none;
+    font-size: 1.5rem;
+    color: var(--color-mint-strong);
+  }
+
+  .text {
+    display: grid;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .value {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--heading);
+    overflow-wrap: anywhere;
+  }
+
+  .arrow {
+    flex: none;
+    font-size: 1.15rem;
+    color: var(--muted);
+    transition:
+      translate 0.3s var(--ease-out-soft),
+      color 0.3s ease;
+  }
+
+  a:hover .arrow {
+    translate: 3px -3px;
+    color: var(--accent-text);
+  }
+</style>

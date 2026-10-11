@@ -1,0 +1,28 @@
+---
+// The site lives under /es/ and /en/. This page only sends the visitor to the
+// language of their browser (Spanish if it is not English).
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { SITE } from '../consts';
+
+const es = getRelativeLocaleUrl('es');
+const en = getRelativeLocaleUrl('en');
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{SITE.name}</title>
+    <meta name="robots" content="noindex" />
+    <script is:inline define:vars={{ es, en }}>
+      const languages = navigator.languages?.length ? navigator.languages : [navigator.language || 'es'];
+      const first = languages.map((l) => l.toLowerCase().slice(0, 2)).find((l) => l === 'es' || l === 'en');
+      location.replace((first === 'en' ? en : es) + location.hash);
+    </script>
+    <noscript><meta http-equiv="refresh" content={`0; url=${es}`} /></noscript>
+  </head>
+  <body>
+    <p><a href={es}>Español</a> · <a href={en}>English</a></p>
+  </body>
+</html>

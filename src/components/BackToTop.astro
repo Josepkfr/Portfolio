@@ -1,0 +1,49 @@
+---
+import { Icon } from 'astro-icon/components';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const t = useTranslations(Astro.props.lang);
+---
+
+<a href="#top" data-back-to-top aria-label={t('footer.top')}>
+  <Icon name="bi:arrow-up-short" />
+</a>
+
+<style>
+  a {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 40;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    background: var(--color-mint);
+    color: var(--color-ink);
+    font-size: 1.75rem;
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 0.75rem;
+    transition:
+      opacity 0.4s ease,
+      translate 0.4s var(--ease-out-soft),
+      visibility 0s 0.4s,
+      background-color 0.3s ease;
+  }
+
+  a[data-visible] {
+    opacity: 1;
+    visibility: visible;
+    translate: none;
+    transition-delay: 0s;
+  }
+
+  a:hover {
+    background: var(--color-mint-strong);
+  }
+</style>

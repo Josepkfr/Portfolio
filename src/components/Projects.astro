@@ -1,0 +1,77 @@
+---
+import ProjectCard from './ProjectCard.astro';
+import { getProjects } from '../lib/projects';
+import { categories, useTranslations, type Locale, type UIKey } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+// Only offer filters that match at least one project.
+const filters = categories.filter((category) => projects.some(({ entry }) => entry.data.category === category));
+---
+
+<section id="projects" class="section" aria-labelledby="projects-title">
+  <div class="wrap">
+    <h2 id="projects-title" class="section-title" data-reveal>{t('projects.title')}</h2>
+
+    <div class="filters" role="group" aria-label={t('projects.filter')} data-filters data-reveal>
+      <button type="button" data-filter="all" aria-pressed="true">{t('projects.all')}</button>
+      {
+        filters.map((category) => (
+          <button type="button" data-filter={category} aria-pressed="false">
+            {t(`category.${category}` as UIKey)}
+          </button>
+        ))
+      }
+    </div>
+
+    <ul class="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
+      {projects.map((project, index) => <ProjectCard lang={lang} project={project} index={index} />)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+    margin-bottom: 2.25rem;
+  }
+
+  button {
+    position: relative;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+
+  button::after {
+    content: '';
+    position: absolute;
+    inset: auto 0.9rem 0.25rem 0.9rem;
+    height: 2px;
+    background: var(--color-mint);
+    scale: 0 1;
+    transition: scale 0.35s var(--ease-out-soft);
+  }
+
+  button:hover,
+  button[aria-pressed='true'] {
+    color: var(--accent-text);
+  }
+
+  button[aria-pressed='true']::after {
+    scale: 1 1;
+  }
+</style>

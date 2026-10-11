@@ -1,0 +1,47 @@
+---
+import { Icon } from 'astro-icon/components';
+import { SITE } from '../consts';
+import { useTranslations, type Locale } from '../i18n/ui';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+
+const socials = [
+  { href: SITE.linkedin, icon: 'bi:linkedin', label: 'LinkedIn' },
+  { href: SITE.github, icon: 'bi:github', label: 'GitHub' },
+  { href: `mailto:${SITE.email}`, icon: 'bi:envelope', label: 'Email' },
+];
+---
+
+<footer class="bg-surface py-12 text-center">
+  <div class="wrap">
+    <ul class="mb-5 flex justify-center gap-2">
+      {
+        socials.map((social) => (
+          <li>
+            <a
+              href={social.href}
+              aria-label={social.label}
+              class="grid size-11 place-items-center text-2xl text-muted transition-colors duration-300 hover:text-accent"
+              {...social.href.startsWith('http') ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+            >
+              <Icon name={social.icon} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <p class="text-xs font-medium uppercase tracking-[0.1em] text-muted">
+      &copy; {year} {SITE.name}. {t('footer.rights')}
+    </p>
+    <p class="mt-2 text-[0.8125rem] text-muted">
+      {t('footer.credit')}{' '}
+      <a href="https://bootstrapmade.com/" class="link-underline text-heading" rel="noopener">BootstrapMade</a>
+    </p>
+  </div>
+</footer>
