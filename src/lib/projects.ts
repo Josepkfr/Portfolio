@@ -2,14 +2,12 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 import type { Locale } from '../i18n/ui';
 
 export interface Project {
-  /** File name without language folder or extension; shared by both languages. */
   slug: string;
   entry: CollectionEntry<'projects'>;
 }
 
 let warned = false;
 
-/** Projects of one language: featured first, then newest first. */
 export async function getProjects(lang: Locale): Promise<Project[]> {
   const entries = await getCollection('projects', ({ id }) => id.startsWith(`${lang}/`));
 
