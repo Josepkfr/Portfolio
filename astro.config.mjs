@@ -4,8 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 
-// GitHub Pages project site: https://josepkfr.github.io/Portfolio/
-// With a custom domain (or Vercel/Netlify), set `site` to it and remove `base`.
+// Custom domain, served from the root (no `base`).
 const site = 'https://alpalajose.me';
 
 // https://astro.build/config

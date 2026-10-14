@@ -1,11 +1,12 @@
 export const SITE = {
   name: 'José Alpala',
-  email: 'alpalajose@gmail.com',
+  email: 'alpalajose99@gmail.com',
   github: 'https://github.com/Josepkfr',
-  linkedin: 'https://www.linkedin.com/in/jos%C3%A9-alpala-0280b4182/',
-  // File name of the CV inside public/ (for example 'cv-jose-alpala.pdf').
-  // While it is null the download button is not rendered.
-  cv: null as string | null,
+  linkedin: 'https://www.linkedin.com/in/jose-alpala/',
+  cv: {
+    es: '/cv/CV_Jose_Antonio_Alpala_Tapia.pdf',
+    en: '/cv/CV_Jose_Antonio_Alpala_Tapia_EN.pdf',
+  },
 };
 
 /** Prefixes a file from public/ with the configured base path. */

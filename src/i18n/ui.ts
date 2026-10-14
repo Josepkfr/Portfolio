@@ -5,13 +5,11 @@ export const defaultLocale: Locale = 'es';
 export const categories = ['frontend', 'fullstack', 'backend', 'data'] as const;
 export type Category = (typeof categories)[number];
 
-// TODO(José): los textos de "about" y "skills" son provisionales, escritos a
-// partir de tus repos públicos. Cámbialos por tu bio real en ambos idiomas.
 export const ui = {
   es: {
-    'meta.title': 'José Alpala — Desarrollador backend y frontend',
+    'meta.title': 'José Alpala — Desarrollador Full Stack especializado en backend',
     'meta.description':
-      'Portafolio de José Alpala, desarrollador web. Proyectos con Node.js, Go, Python, React y Angular.',
+      'Portafolio de José Alpala, desarrollador Full Stack especializado en backend. Experiencia con Go, Node.js, TypeScript, Python, React y AWS.',
 
     'nav.label': 'Navegación principal',
     'nav.home': 'Inicio',
@@ -25,14 +23,14 @@ export const ui = {
     'nav.skip': 'Saltar al contenido',
 
     'hero.greeting': 'Soy',
-    'hero.tagline': 'Desarrollador web · Backend · Frontend',
+    'hero.tagline': 'Desarrollador Full Stack · Backend · Cloud',
     'hero.scroll': 'Sigue bajando',
 
     'about.title': 'Sobre mí',
     'about.lead':
-      'Soy desarrollador web: construyo aplicaciones de principio a fin, desde la API hasta la interfaz.',
+      'Desarrollador de software con más de 5 años de experiencia en desarrollo Full Stack, especializado en backend y en soluciones escalables en la nube.',
     'about.body':
-      'Trabajo sobre todo con JavaScript y TypeScript, con Node.js en el servidor y React o Angular en el cliente. En mis proyectos más recientes también uso Go y Python, y despliego en la nube con Docker y Terraform.',
+      'He diseñado, implementado y mantenido microservicios y APIs REST con Go, Node.js, TypeScript y Python, sobre bases de datos SQL y NoSQL (PostgreSQL, MongoDB) y servicios de AWS (Lambda, EC2, RDS). Complemento el backend con desarrollo frontend en React y Angular, contenedores con Docker y Kubernetes, CI/CD con GitHub Actions y metodologías ágiles (Scrum), con foco en la calidad del código y la cobertura de pruebas.',
     'about.photoAlt': 'Retrato de José Alpala',
     'about.cta': 'Ver proyectos',
     'about.cv': 'Descargar CV',
@@ -43,7 +41,7 @@ export const ui = {
     'skills.frontend': 'Frontend',
     'skills.frontend.text': 'Interfaces claras, rápidas y adaptadas a cualquier pantalla.',
     'skills.data': 'Datos',
-    'skills.data.text': 'Modelado y consulta de datos en bases NoSQL.',
+    'skills.data.text': 'Modelado y consulta de datos en bases SQL y NoSQL.',
     'skills.cloud': 'Nube y herramientas',
     'skills.cloud.text': 'Contenedores e infraestructura como código.',
 
@@ -81,9 +79,9 @@ export const ui = {
     '404.home': 'Ir al inicio',
   },
   en: {
-    'meta.title': 'José Alpala — Backend and frontend developer',
+    'meta.title': 'José Alpala — Full-stack developer specialised in backend',
     'meta.description':
-      'Portfolio of José Alpala, web developer. Projects built with Node.js, Go, Python, React and Angular.',
+      'Portfolio of José Alpala, full-stack developer specialised in backend. Experience with Go, Node.js, TypeScript, Python, React and AWS.',
 
     'nav.label': 'Main navigation',
     'nav.home': 'Home',
@@ -97,14 +95,14 @@ export const ui = {
     'nav.skip': 'Skip to content',
 
     'hero.greeting': "I'm",
-    'hero.tagline': 'Web developer · Backend · Frontend',
+    'hero.tagline': 'Full-stack developer · Backend · Cloud',
     'hero.scroll': 'Keep scrolling',
 
     'about.title': 'About',
     'about.lead':
-      "I'm a web developer: I build applications end to end, from the API to the interface.",
+      'Software developer with over 5 years of experience in full-stack development, specialised in backend and scalable cloud solutions.',
     'about.body':
-      'I work mostly with JavaScript and TypeScript, with Node.js on the server and React or Angular on the client. My most recent projects also use Go and Python, deployed to the cloud with Docker and Terraform.',
+      'I have designed, built and maintained microservices and REST APIs with Go, Node.js, TypeScript and Python, backed by SQL and NoSQL databases (PostgreSQL, MongoDB) and AWS services (Lambda, EC2, RDS). I complement backend work with frontend development in React and Angular, containers with Docker and Kubernetes, CI/CD with GitHub Actions and agile methodologies (Scrum), with a focus on code quality and test coverage.',
     'about.photoAlt': 'Portrait of José Alpala',
     'about.cta': 'See projects',
     'about.cv': 'Download CV',
@@ -115,7 +113,7 @@ export const ui = {
     'skills.frontend': 'Frontend',
     'skills.frontend.text': 'Clear, fast interfaces that adapt to any screen.',
     'skills.data': 'Data',
-    'skills.data.text': 'Modelling and querying data in NoSQL databases.',
+    'skills.data.text': 'Modelling and querying data in SQL and NoSQL databases.',
     'skills.cloud': 'Cloud and tooling',
     'skills.cloud.text': 'Containers and infrastructure as code.',
 
@@ -164,14 +162,11 @@ export function useTranslations(lang: Locale) {
   return (key: UIKey): string => ui[lang][key];
 }
 
-// The words the hero types after the greeting. The first one is rendered in
-// the HTML, so it is what visitors without JavaScript or animations see.
 export const heroWords: Record<Locale, string[]> = {
   es: ['José Alpala', 'Desarrollador', 'Backend', 'Frontend'],
   en: ['José Alpala', 'Developer', 'Backend', 'Frontend'],
 };
 
-// TODO(José): revisa la lista; solo incluye lo que aparece en tus repos públicos.
 export const skills = [
   {
     key: 'backend',
@@ -181,16 +176,16 @@ export const skills = [
   {
     key: 'frontend',
     icon: 'bi:window-sidebar',
-    items: ['React', 'Angular', 'TypeScript', 'JavaScript', 'Sass'],
+    items: ['React', 'Angular', 'TypeScript', 'JavaScript', 'React Native', 'Flutter', 'Sass'],
   },
   {
     key: 'data',
     icon: 'bi:database',
-    items: ['MongoDB', 'Firestore', 'pandas'],
+    items: ['PostgreSQL', 'MongoDB', 'Firestore', 'pandas', 'polars'],
   },
   {
     key: 'cloud',
     icon: 'bi:cloud-check',
-    items: ['Docker', 'Terraform', 'Google Cloud Run', 'Git'],
+    items: ['AWS', 'Docker', 'Kubernetes', 'Terraform', 'Google Cloud Run', 'GitHub Actions', 'Git'],
   },
 ] as const;

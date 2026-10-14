@@ -10,7 +10,6 @@ interface Props {
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const projects = await getProjects(lang);
-// Only offer filters that match at least one project.
 const filters = categories.filter((category) => projects.some(({ entry }) => entry.data.category === category));
 ---
 
