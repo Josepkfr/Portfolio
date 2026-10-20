@@ -82,13 +82,12 @@ const socials = [
     object-fit: cover;
   }
 
-  /* Darkens the photo towards the text side so the heading stays readable. */
   .shade {
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(90deg, rgb(31 37 38 / 0.82), rgb(31 37 38 / 0.35) 70%),
-      linear-gradient(0deg, rgb(31 37 38 / 0.55), transparent 40%);
+      linear-gradient(90deg, rgb(31 37 38 / 0.70), rgb(31 37 38 / 0.35) 70%),
+      linear-gradient(0deg, rgb(31 37 38 / 0.45), transparent 40%);
   }
 
   .content {
@@ -102,12 +101,9 @@ const socials = [
     font-weight: 700;
     line-height: 1.1;
     text-transform: uppercase;
-    /* Reserves the line so the layout does not jump while the word is empty. */
     min-height: 1.1em;
   }
 
-  /* On narrow screens the typed word gets its own line, so words of different
-     length never change the number of lines. */
   @media (max-width: 639px) {
     .typed {
       display: block;
@@ -179,7 +175,6 @@ const socials = [
       animation: nudge 1.8s ease-in-out infinite;
     }
 
-    /* Parallax: the photo drifts and zooms slightly while the hero scrolls away. */
     @supports (animation-timeline: scroll()) {
       .hero-bg {
         animation: drift linear both;
